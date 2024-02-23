@@ -14,7 +14,8 @@ public class Player : MonoBehaviour
     // Internal parameters
 
     [SerializeField]
-    private float jumpHeight = 3f;
+    private float speed = 5f;
+    private float jumpHeight = 5f;
     public event EventHandler raise;
     private float startGravityDelay = 0.1f;
     private float lookAtPointDistance = 5f;
@@ -41,10 +42,13 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(RoundStats.GameScore);
+        transform.Translate(Vector3.right * speed * Time.deltaTime);
+
 
         GetPlayerInput();
 
+
+        /*
 
         if (Wall.WallNearPlayer && startGravityDelayPassed)
         {
@@ -58,7 +62,7 @@ public class Player : MonoBehaviour
         {
             rb.useGravity = false;
             rb.velocity = Vector3.zero;
-        }
+        }*/
 
 
         if (jump)
@@ -100,11 +104,5 @@ public class Player : MonoBehaviour
         {
             jump = true;
         }
-    }
-    
-    IEnumerator StartGravityDelay()
-    {
-        yield return new WaitForSeconds(startGravityDelay);
-        startGravityDelayPassed = true;
     }
 }

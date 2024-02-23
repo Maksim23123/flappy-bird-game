@@ -8,6 +8,8 @@ public class Wall : MonoBehaviour
 
     [SerializeField]
     InstanceSpeaker instanceSpeaker;
+    [SerializeField]
+    public Transform pivotPoint;
     
     // Internal parameters
     private static bool wallNearPlayer = false;
@@ -22,26 +24,24 @@ public class Wall : MonoBehaviour
         get { return responsCount; }
     }
 
-    float speed = 5.0f;
-    float retirePosition = -13f;
-    float nearPlayerPosition = 26f;
+    float retireDistance = -13f;
+    //float nearPlayerPosition = 26f;
 
 
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.left * speed * Time.deltaTime);
-
-        if (transform.position.x < retirePosition)
+        if (transform.position.x < pivotPoint.position.y - retireDistance )
         {
             instanceSpeaker.sendReusePoolRequest?.Invoke(gameObject);
             gameObject.SetActive(false);
         }
+        /*
         else if (transform.position.x < nearPlayerPosition)
         {
             wallNearPlayer = true;
-        }
-        responsCount += 1;
+        }*/
+        //responsCount += 1;
     }
 
     public static void ResetNearPlayerChecker()

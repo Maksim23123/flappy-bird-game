@@ -1,12 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
-public class Instance : ScriptableObject
+public class Instance : MonoBehaviour
 {
-    public GameObject instance;
+    // External parameters
 
-    public float interval;
-    int maxObjecCount;
+    [SerializeField]
+    public Transform pivotPoint;
+    public Action<GameObject> sendReuseRequest = null;
+
+    // Internal parameters
+    public float retireDistance = 13f;
+
+    private void Update()
+    {
+        if (transform.position.x < pivotPoint.position.x - retireDistance)
+        {
+            sendReuseRequest?.Invoke(gameObject);
+        }
+    }
 }

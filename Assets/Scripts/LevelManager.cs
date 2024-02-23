@@ -21,7 +21,7 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
-        summoner.GetComponent<Summoner>().raise += OnEvent;
+        //summoner.GetComponent<Summoner>().raise += OnEvent;
         player.GetComponent<Player>().raise += OnEvent;
     }
 
