@@ -1,31 +1,30 @@
-using OpenCover.Framework.Model;
-using Palmmedia.ReportGenerator.Core.Reporting.Builders;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Net.NetworkInformation;
 using UnityEngine;
+using UnityEngine.Timeline;
 using UnityEngine.UIElements;
 
 public class Summoner : MonoBehaviour
 {
-    // External parameters
-    private static Transform entityInfoManagersBasicTransform;
     private static Transform pivot;
 
     [SerializeField]
     private Transform pivotStatCandidat;
 
+    [SerializeField]
+    private LevelManager levelManager;
+
     // Internal parameters
 
     [SerializeField]
-    private EntityInfoManager[] entityInfoManagers; 
+    private EntityInfoManager[] entityInfoManagers;
 
 
 
     private void Start()
     {
-        entityInfoManagersBasicTransform = transform;
+        levelManager.onChangeGameState += OnChangeGameState;
         pivot = pivotStatCandidat;
         foreach (var entityInfoManager in entityInfoManagers)
         {
@@ -33,71 +32,27 @@ public class Summoner : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void OnChangeGameState(GameState gameState)
     {
-        /*
-        if (Wall.ResponsCount > maxObjectsCount)
+        if (gameState == GameState.Game)
         {
-            if (Wall.WallNearPlayer)
+            foreach (var entityInfoManager in entityInfoManagers)
             {
-                Wall.ResetNearPlayerChecker();
+                entityInfoManager.Restart();
             }
-            else
-            {
-                Wall.ResetNearPlayerChecker();
-            }
-        }*/
-    }
-
-    IEnumerator CreateInstance()
-    {
-        /*
-        if (instancesCount < maxObjectsCount)
-        {
-            PerformInstantiate();
         }
-        else
-        {
-            PerformReuse();
-        }
-        */
-        yield return new WaitForSeconds(1f);
-
-        StartCoroutine(CreateInstance());
-    }
-
-    void PerformInstantiate()
-    {
-        /*
-        Vector3 position = transform.position;
-        position.y = UnityEngine.Random.value * verticalHeightBoundsSize * 2 - verticalHeightBoundsSize;
-        GameObject instance = Instantiate(instanceExample, position, Quaternion.identity, gameObject.transform);
-        InstanceSpeaker instanceSpeaker = instance.GetComponent<InstanceSpeaker>();
-
-        instanceSpeaker.sendReusePoolRequest += PerformReuse;
-        instancesCount++;*/
-    }
-
-    void PerformReuse(GameObject instance)
-    {
-        /*
-        if (reusePool.Count > 0)
-        {
-            Vector3 position = transform.position;
-            position.y = UnityEngine.Random.value * verticalHeightBoundsSize * 2 - verticalHeightBoundsSize;
-            instance.SetActive(true);
-            instance.transform.position = position;
-        }
-        */
+        
     }
 
     [Serializable]
     private class EntityInfoManager
     {
+        public event Action<Func<Vector3, bool>> restartSummonFlow = null;
+
         [SerializeField]
         private EntityInfo entityInfo;
 
-        private Transform transform = null;
+        private Vector3 currentPosition;
         private Transform pivot = null;
 
         [SerializeField]
@@ -107,6 +62,9 @@ public class Summoner : MonoBehaviour
         [SerializeField]
         public bool zAutoIncreasement = false;
 
+        [SerializeField]
+        public bool restartable = false;
+
         // Buffers
 
         private Vector3 bufferedPosition;
@@ -114,13 +72,13 @@ public class Summoner : MonoBehaviour
         public Vector3 GetNextPosition(bool recursive = false)
         {
             CheckAllImportantTransforms();
-            Vector3 position = transform.position;
+            Vector3 position = currentPosition;
             if (recursive)
                 position = bufferedPosition;
 
             position = entityInfo.EntityCoordinats.ProcessVector3(position);
             
-            Vector3 newTransformPosition = transform.position;
+            Vector3 newTransformPosition = currentPosition;
 
             if (xAutoIncreasement)
                 newTransformPosition.x = position.x;
@@ -132,9 +90,9 @@ public class Summoner : MonoBehaviour
                 newTransformPosition.z = position.z;
             
 
-            if (entityInfo.ValidatePosition(position, pivot.position))
+            if (ValidatePositionPivotAccording(position))
             {
-                transform.position = newTransformPosition;
+                currentPosition = newTransformPosition;
                 return position;
             }
             else
@@ -146,8 +104,8 @@ public class Summoner : MonoBehaviour
 
         private void CheckAllImportantTransforms()
         {
-            if (transform == null)
-                transform = entityInfoManagersBasicTransform;
+            if (currentPosition == null)
+                currentPosition = Vector3.zero;
             if (pivot == null)
                 pivot = Summoner.pivot;
         }
@@ -161,6 +119,7 @@ public class Summoner : MonoBehaviour
                 instance.pivotPoint = pivot;
                 instance.retireDistance = entityInfo.RetireDistance;
                 instance.sendReuseRequest = Reuse;
+                restartSummonFlow += instance.OnRestartGame;
             }
         }
 
@@ -169,6 +128,18 @@ public class Summoner : MonoBehaviour
             gameObject.transform.position = GetNextPosition();
         }
 
+        public void Restart()
+        {
+            if (restartable)
+            {
+                restartSummonFlow.Invoke(ValidatePositionPivotAccording);
+            }
+        }
+
+        private bool ValidatePositionPivotAccording(Vector3 position)
+        {
+            return entityInfo.ValidatePosition(position, pivot.position);
+        }
     }
 }
 

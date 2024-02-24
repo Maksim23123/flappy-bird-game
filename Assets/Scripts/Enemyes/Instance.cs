@@ -21,4 +21,12 @@ public class Instance : MonoBehaviour
             sendReuseRequest?.Invoke(gameObject);
         }
     }
+
+    public void OnRestartGame(Func<Vector3, bool> validatePosition)
+    {
+        if (!validatePosition(transform.position))
+        {
+            sendReuseRequest?.Invoke(gameObject);
+        }
+    }
 }

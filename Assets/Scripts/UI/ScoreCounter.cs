@@ -5,15 +5,11 @@ using UnityEngine;
 
 public class ScoreCounter : MonoBehaviour
 {
-    private string defaultText = string.Empty;
-    private TextMeshProUGUI textMeshProUGUI;
+    private readonly string defaultText = "Score: ";
+    [SerializeField]
+    private TextMeshProUGUI[] textMeshs;
 
     // Start is called before the first frame update
-    void Start()
-    {
-        textMeshProUGUI = GetComponent<TextMeshProUGUI>();
-        defaultText = textMeshProUGUI.text;
-    }
 
     private void Update()
     {
@@ -22,7 +18,8 @@ public class ScoreCounter : MonoBehaviour
 
     private void UpdateScoreCounter()
     {
-        textMeshProUGUI.text = defaultText + RoundStats.GameScore;
+        foreach (var textMesh in textMeshs)
+            textMesh.text = defaultText + RoundStats.GameScore;
     }
 
 

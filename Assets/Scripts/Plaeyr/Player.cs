@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,6 +10,12 @@ public class Player : MonoBehaviour
     // External parameters
     [SerializeField]
     private Transform lookAtPoint;
+    [SerializeField]
+    private GameObject playerMesh;
+    [SerializeField]
+    private GameObject dieParticleSystem;
+    [SerializeField]
+    private LevelManager levelManager;
 
 
     // Internal parameters
@@ -16,26 +23,18 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float speed = 5f;
     private float jumpHeight = 5f;
-    public event EventHandler raise;
-    private float startGravityDelay = 0.1f;
+    public event Action onGameOverEvent;
     private float lookAtPointDistance = 5f;
     private float lookAtPointRangeScale = 0.1f;
     private string scoreTriggerTag = "ScoreTrigger";
 
-    // Debug parameters
-
-    [SerializeField]
-    private TextMeshProUGUI gravity;
-    [SerializeField]
-    private TextMeshProUGUI timeScale;
-
     // Buffers
     private bool jump;
     private Rigidbody rb;
-    private bool startGravityDelayPassed = false;
 
     void Start()
     {
+        levelManager.onChangeGameState += OnChangeGameState;
         rb = GetComponent<Rigidbody>();
     }
 
@@ -47,24 +46,6 @@ public class Player : MonoBehaviour
 
         GetPlayerInput();
 
-
-        /*
-
-        if (Wall.WallNearPlayer && startGravityDelayPassed)
-        {
-            rb.useGravity = true;
-        }
-        else if (Wall.WallNearPlayer && !startGravityDelayPassed)
-        {
-            StartCoroutine(StartGravityDelay());
-        }
-        else
-        {
-            rb.useGravity = false;
-            rb.velocity = Vector3.zero;
-        }*/
-
-
         if (jump)
         {
             rb.velocity = Vector3.up * jumpHeight;
@@ -74,15 +55,12 @@ public class Player : MonoBehaviour
         UpdateLookAtPoint();
     }
 
-    private void UpdateLookAtPoint()
-    {
-        lookAtPoint.position = transform.position + Vector3.up * rb.velocity.y * Mathf.Abs(rb.velocity.y) * lookAtPointRangeScale 
-            + Vector3.right * lookAtPointDistance;
-    }
-    
     private void OnCollisionEnter(Collision collision)
     {
-        raise?.Invoke(gameObject, new ChangeTimeArgs(0));
+        playerMesh.SetActive(false);
+        dieParticleSystem.SetActive(true);
+        dieParticleSystem.GetComponent<ParticleSystem>().Play();
+        onGameOverEvent?.Invoke();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -91,6 +69,12 @@ public class Player : MonoBehaviour
         {
             RoundStats.ImproveScore();
         }
+    }
+
+    private void UpdateLookAtPoint()
+    {
+        lookAtPoint.position = transform.position + Vector3.up * rb.velocity.y * Mathf.Abs(rb.velocity.y) * lookAtPointRangeScale 
+            + Vector3.right * lookAtPointDistance;
     }
 
     void GetPlayerInput()
@@ -104,5 +88,17 @@ public class Player : MonoBehaviour
         {
             jump = true;
         }
+    }
+
+    private void OnChangeGameState(GameState gameState)
+    {
+        if (gameState == GameState.Game)
+        {
+            transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+            playerMesh.SetActive(true);
+            dieParticleSystem.SetActive(false);
+            dieParticleSystem.GetComponent<ParticleSystem>().Stop();
+        }
+        
     }
 }
