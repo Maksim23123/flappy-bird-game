@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.Tracing;
 using UnityEngine;
 
@@ -30,7 +29,8 @@ public class EntityInfo : ScriptableObject
     public bool ValidatePosition(Vector3 position, Vector3 pivot)
     {
         float distanceX = position.x - pivot.x;
-        if (distanceX < retireDistance || Mathf.Abs(distanceX) < minXSpawnDistance) 
+
+        if (distanceX < -retireDistance || Mathf.Abs(distanceX) < minXSpawnDistance) 
             return false;
         else 
             return true;
@@ -40,6 +40,15 @@ public class EntityInfo : ScriptableObject
 [Serializable]
 public class EntityCoordinats
 {
+    [Header("Start position Parameters")]
+    [Space(5)]
+    [SerializeField]
+    private float xStartPos;
+    [SerializeField]
+    private float yStartPos;
+    [SerializeField]
+    private float zStartPos;
+
     [Header("Offset Parameters")]
     [Space(5)]
     [SerializeField]
@@ -65,6 +74,9 @@ public class EntityCoordinats
     public float XRangeValue { get => xRangeValue; }
     public float YRangeValue { get => yRangeValue; }
     public float ZRangeValue { get => zRangeValue; }
+    public float XStartPos { get => xStartPos; }
+    public float YStartPos { get => yStartPos; }
+    public float ZStartPos { get => zStartPos; }
 
     public Vector3 ProcessVector3(Vector3 vector, Func<float, float> rangeProcessor = null)
     {

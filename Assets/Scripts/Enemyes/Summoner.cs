@@ -53,6 +53,7 @@ public class Summoner : MonoBehaviour
         private EntityInfo entityInfo;
 
         private Vector3 currentPosition;
+        private bool currentPositionIsAssigned = false;
         private Transform pivot = null;
 
         [SerializeField]
@@ -104,8 +105,14 @@ public class Summoner : MonoBehaviour
 
         private void CheckAllImportantTransforms()
         {
-            if (currentPosition == null)
-                currentPosition = Vector3.zero;
+            if (!currentPositionIsAssigned)
+            {
+                currentPosition = new Vector3(entityInfo.EntityCoordinats.XStartPos
+                    , entityInfo.EntityCoordinats.YStartPos
+                    , entityInfo.EntityCoordinats.ZStartPos);
+                currentPositionIsAssigned = true;
+            }
+                
             if (pivot == null)
                 pivot = Summoner.pivot;
         }
@@ -116,10 +123,13 @@ public class Summoner : MonoBehaviour
             for (int i = 0; i < entityInfo.InstancesCount; i++)
             {
                 Instance instance = Instantiate(entityInfo.entity, GetNextPosition(), rotation).GetComponent<Instance>();
-                instance.pivotPoint = pivot;
-                instance.retireDistance = entityInfo.RetireDistance;
-                instance.sendReuseRequest = Reuse;
-                restartSummonFlow += instance.OnRestartGame;
+                if (instance != null)
+                {
+                    instance.pivotPoint = pivot;
+                    instance.retireDistance = entityInfo.RetireDistance;
+                    instance.sendReuseRequest = Reuse;
+                    restartSummonFlow += instance.OnRestartGame;
+                }
             }
         }
 
