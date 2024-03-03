@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject dieParticleSystem;
     [SerializeField]
+    private GameObject jumpParticleSystem;
+    [SerializeField]
     private LevelManager levelManager;
 
 
@@ -31,6 +33,7 @@ public class Player : MonoBehaviour
     // Buffers
     private bool jump;
     private Rigidbody rb;
+    private bool jumpParticlesInCooldown = false;
 
     void Start()
     {
@@ -48,6 +51,11 @@ public class Player : MonoBehaviour
 
         if (jump)
         {
+            if (!jumpParticlesInCooldown && levelManager.GameState == GameState.Game)
+            {
+                Instantiate(jumpParticleSystem, transform.position, transform.rotation);
+                StartCoroutine(StartJumpParticlesCooldown());
+            }
             rb.velocity = Vector3.up * jumpHeight;
             jump = false;
         }
@@ -100,5 +108,12 @@ public class Player : MonoBehaviour
             dieParticleSystem.GetComponent<ParticleSystem>().Stop();
         }
         
+    }
+
+    IEnumerator StartJumpParticlesCooldown()
+    {
+        jumpParticlesInCooldown = true;
+        yield return new WaitForSeconds(0.1f);
+        jumpParticlesInCooldown = false;
     }
 }
