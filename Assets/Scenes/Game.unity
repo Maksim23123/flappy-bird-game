@@ -6993,6 +6993,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1843919722}
   - component: {fileID: 1843919723}
+  - component: {fileID: 1843919724}
+  - component: {fileID: 1843919725}
   m_Layer: 0
   m_Name: Object summoner
   m_TagString: Untagged
@@ -7030,16 +7032,44 @@ MonoBehaviour:
   pivotStatCandidat: {fileID: 1636839053}
   levelManager: {fileID: 2078556059}
   entityInfoManagers:
-  - entityInfo: {fileID: 11400000, guid: d6acfcecbf75d1e4a80eb701dfb862dd, type: 2}
-    xAutoIncreasement: 1
-    yAutoIncreasement: 0
-    zAutoIncreasement: 0
-    restartable: 1
-  - entityInfo: {fileID: 11400000, guid: ea110989527e8f24e99273757cb54004, type: 2}
-    xAutoIncreasement: 1
-    yAutoIncreasement: 0
-    zAutoIncreasement: 0
-    restartable: 0
+  - {fileID: 1843919724}
+  - {fileID: 1843919725}
+--- !u!114 &1843919724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1843919721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57d61fed850f0f84c95e8e0200698b74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityInfo: {fileID: 11400000, guid: ea110989527e8f24e99273757cb54004, type: 2}
+  pivot: {fileID: 1636839053}
+  xAutoIncreasement: 1
+  yAutoIncreasement: 0
+  zAutoIncreasement: 0
+  restartable: 0
+--- !u!114 &1843919725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1843919721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57d61fed850f0f84c95e8e0200698b74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityInfo: {fileID: 11400000, guid: d6acfcecbf75d1e4a80eb701dfb862dd, type: 2}
+  pivot: {fileID: 1636839053}
+  xAutoIncreasement: 1
+  yAutoIncreasement: 0
+  zAutoIncreasement: 0
+  restartable: 1
 --- !u!1 &1971505086
 GameObject:
   m_ObjectHideFlags: 0
