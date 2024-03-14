@@ -78,7 +78,7 @@ public class DefaultEntityInfoManager : EntityInfoManager
         Quaternion rotation = Quaternion.identity;
         for (int i = 0; i < entityInfo.InstancesCount; i++)
         {
-            Instance instance = Instantiate(entityInfo.entity, GetNextPosition(), rotation).GetComponent<Instance>();
+            Instance instance = Instantiate(entityInfo.entity, GetNextPosition(), rotation, transform).GetComponent<Instance>();
             if (instance != null)
             {
                 instance.pivotPoint = pivot;

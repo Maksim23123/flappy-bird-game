@@ -12,9 +12,15 @@ public class GameUIManager : MonoBehaviour
     [SerializeField]
     private SerializableDict<GameState, GameObject> gamestateOverlayDict = new SerializableDict<GameState, GameObject>();
 
+    public static Collider particlesColector;
+
+    [SerializeField]
+    private Collider particlesColectorObject;
+
     // Start is called before the first frame update
     void Start()
     {
+        particlesColector = particlesColectorObject;
         levelManager.onChangeGameState += UpdateOverlay;
     }
 

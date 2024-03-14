@@ -7,8 +7,6 @@ public class Wall : MonoBehaviour
     // External parameters
 
     [SerializeField]
-    InstanceSpeaker instanceSpeaker;
-    [SerializeField]
     public Transform pivotPoint;
     
     // Internal parameters
@@ -33,7 +31,7 @@ public class Wall : MonoBehaviour
     {
         if (transform.position.x < pivotPoint.position.y - retireDistance )
         {
-            instanceSpeaker.sendReusePoolRequest?.Invoke(gameObject);
+            //instanceSpeaker.sendReusePoolRequest?.Invoke(gameObject);
             gameObject.SetActive(false);
         }
         /*

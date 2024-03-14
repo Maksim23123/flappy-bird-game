@@ -7,6 +7,10 @@ using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
+    [SerializeField]
+    private GameData gameData;
+    public GameData GameData { get => gameData; }
+
     public event Action<GameState> onChangeGameState = null;
 
     private GameState gameState = GameState.Game;

@@ -37,11 +37,34 @@ public class SerializableDict<T1, T2>
         }
     }
 
+    public bool TryGetValue(T1 key, out T2 value)
+    {
+        if (InternalContainsKey(key))
+        {
+            value = this[key];
+            return true;
+        }
+        else
+        {
+            value = default(T2);
+            return false;
+        }
+    }
+
     public List<T2> Values {
         get
         {
             SyncValues();
-            return values;
+            return new List<T2>(values);
+        }
+    }
+
+    public List<T1> Keys
+    {
+        get
+        {
+            SyncKeys();
+            return new List<T1>(keys);
         }
     }
 

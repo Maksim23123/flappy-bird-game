@@ -19,11 +19,18 @@ public class Player : MonoBehaviour
     [SerializeField]
     private LevelManager levelManager;
 
+    [SerializeField]
+    private SerializableDict<RoundStats.Difficulty, int> difficultySettings
+        = new SerializableDict<RoundStats.Difficulty, int>();
+
 
     // Internal parameters
 
     [SerializeField]
-    private float speed = 5f;
+    public event Action JumpAction = () => { };
+
+    [SerializeField]
+    private float speed = 10f;
     private float jumpHeight = 5f;
     public event Action onGameOverEvent;
     private float lookAtPointDistance = 5f;
@@ -39,12 +46,14 @@ public class Player : MonoBehaviour
     {
         levelManager.onChangeGameState += OnChangeGameState;
         rb = GetComponent<Rigidbody>();
+        RoundStats.DifficultyChanged += OnDificultyChanged;
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.right * speed * Time.deltaTime);
+        float noEnemiesBias = Mathf.Clamp(Vector3.Distance(transform.position, RoundStats.firstEnemyPosition) - 13, 0, float.PositiveInfinity);
+        transform.Translate(Vector3.right * (speed + noEnemiesBias) * Time.deltaTime);
 
 
         GetPlayerInput();
@@ -57,6 +66,7 @@ public class Player : MonoBehaviour
                 StartCoroutine(StartJumpParticlesCooldown());
             }
             rb.velocity = Vector3.up * jumpHeight;
+            JumpAction();
             jump = false;
         }
 
@@ -108,6 +118,14 @@ public class Player : MonoBehaviour
             dieParticleSystem.GetComponent<ParticleSystem>().Stop();
         }
         
+    }
+
+    private void OnDificultyChanged(RoundStats.Difficulty difficulty)
+    {
+        if (difficultySettings.TryGetValue(difficulty, out int newSpeed))
+        {
+            speed = newSpeed;
+        }
     }
 
     IEnumerator StartJumpParticlesCooldown()
