@@ -35,7 +35,9 @@ public class WallEntityInfoManager : EntityInfoManager
     public bool restartable = false;
 
     [SerializeField]
-    public float coinProbability = 0.3f;
+    public int dropCountPerInstance = 2;
+    [SerializeField]
+    public int minorDropDiviationRange = 1;
 
     // Buffers
 
@@ -115,19 +117,50 @@ public class WallEntityInfoManager : EntityInfoManager
                 instance.pivotPoint = pivot;
                 instance.retireDistance = entityInfo.RetireDistance;
                 instance.sendReuseRequest = Reuse;
-                forceRestart += instance.OnForceRestart;
+                forceRestart += instance.OnForceRestart; //Change it
                 restartSummonFlow += instance.OnRestartGame;
-                if (instance.GetType() == typeof(WallInstance) && dropManager.GetRandomDrop(out GameObject drop))
-                {
-                    GameObject newColectable = Instantiate(drop, gameObject.transform);
-                    Colectable colectableData = newColectable.GetComponent<Colectable>();
-                    if (colectableData != null)
-                    {
-                        colectableData.PickUpColectable += OnPickUpColectable;
-                    }
-                    ((WallInstance)instance).SetColectable(newColectable);
-                }
+
+                AddDrop(instance);
+
                 transformsQueue.Enqueue(instance.gameObject.transform);
+            }
+        }
+    }
+
+    private void AddDrop(Instance instance)
+    {
+        List<GameObject> drop = new List<GameObject>();
+        for (int j = 0; j < dropCountPerInstance; j++)
+        {
+            if (dropManager.GetRandomDrop(out GameObject currentDrop))
+            {
+                drop.Add(currentDrop);
+            }
+        }
+
+        if (instance.GetType() == typeof(WallInstance) && drop.Count > 0)
+        {
+            Vector2 horizontalOffset = new Vector2(
+                (entityInfo.EntityCoordinats.XOffset + difficultyOffset.x) / dropCountPerInstance,
+                (entityInfo.EntityCoordinats.ZOffset + difficultyOffset.z) / dropCountPerInstance);
+            ((WallInstance)instance).ClearColectablesColection();
+            for (int j = 0; j < drop.Count; j++)
+            {
+                float heightDiviation = UnityEngine.Random.Range(0, minorDropDiviationRange * 1000 * 2) / 1000 - 1;
+
+                GameObject newColectable = Instantiate(drop[j]
+                    , instance.gameObject.transform.position + new Vector3(
+                        horizontalOffset.x * j,
+                        heightDiviation * Mathf.Clamp(j, 0, 1),
+                        horizontalOffset.y * j)
+                    , Quaternion.identity, instance.gameObject.transform);
+
+                Colectable colectableData = newColectable.GetComponent<Colectable>();
+                if (colectableData != null)
+                {
+                    colectableData.PickUpColectable += OnPickUpColectable;
+                }
+                ((WallInstance)instance).AddColectable(newColectable);
             }
         }
     }
@@ -136,16 +169,9 @@ public class WallEntityInfoManager : EntityInfoManager
     {
         gameObject.transform.position = GetNextPosition();
         Instance instance = gameObject.GetComponent<Instance>();
-        if (instance.GetType() == typeof(WallInstance) && dropManager.GetRandomDrop(out GameObject drop))
-        {
-            GameObject newColectable = Instantiate(drop, gameObject.transform);
-            Colectable colectableData = newColectable.GetComponent<Colectable>();
-            if (colectableData != null)
-            {
-                colectableData.PickUpColectable += OnPickUpColectable;
-            }
-            ((WallInstance)instance).SetColectable(newColectable);
-        }
+
+        AddDrop(instance);
+
         transformsQueue.Dequeue();
         transformsQueue.Enqueue(gameObject.transform);
         RoundStats.firstEnemyPosition = transformsQueue.Peek().position;

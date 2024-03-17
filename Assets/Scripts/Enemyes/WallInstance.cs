@@ -7,7 +7,9 @@ public class WallInstance : Instance
 {
     // External parameters
 
-    GameObject colectable;
+    List<GameObject> colectables = new List<GameObject>();
+
+    public int betweenInstancesOffset = 0;
 
     // Internal parameters
 
@@ -23,29 +25,29 @@ public class WallInstance : Instance
     {
         if (!validatePosition(transform.position))
         {
-            if (colectable != null)
-            {
-                Destroy(colectable);
-            }
+            ClearColectablesColection();
             sendReuseRequest?.Invoke(gameObject);
         }
     }
 
     public override void OnForceRestart()
     {
-        if (colectable != null)
-        {
-            Destroy(colectable);
-        }
+        ClearColectablesColection();
         base.OnForceRestart();
     }
 
-    public void SetColectable(GameObject colectable)
+    public void AddColectable(GameObject colectable)
     {
-        if (this.colectable != null)
+        colectables.Add(colectable);
+    }
+
+    public void ClearColectablesColection()
+    {
+        if (colectables.Count > 0)
         {
-            Destroy(this.colectable);
+            foreach (var colectable in colectables)
+                Destroy(colectable);
+            colectables = new List<GameObject>();
         }
-        this.colectable = colectable;
     }
 }
