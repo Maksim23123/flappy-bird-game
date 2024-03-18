@@ -44,7 +44,7 @@ public class GameUIManager : MonoBehaviour
     public void GoToMainMenueBtn()
     {
         levelManager.RestartGame();
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
 
     

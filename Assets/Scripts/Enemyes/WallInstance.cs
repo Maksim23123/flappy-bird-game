@@ -8,10 +8,19 @@ public class WallInstance : Instance
     // External parameters
 
     List<GameObject> colectables = new List<GameObject>();
-
+    public WallEntityInfoManager wallEntityInfoManager;
     public int betweenInstancesOffset = 0;
 
     // Internal parameters
+
+    private void Start()
+    {
+        if (wallEntityInfoManager != null)
+        {
+            wallEntityInfoManager.forceRestart += OnForceRestart;
+            wallEntityInfoManager.restartSummonFlow += OnRestartGame;
+        }
+    }
 
     private void Update()
     {
@@ -48,6 +57,15 @@ public class WallInstance : Instance
             foreach (var colectable in colectables)
                 Destroy(colectable);
             colectables = new List<GameObject>();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (wallEntityInfoManager != null)
+        {
+            wallEntityInfoManager.forceRestart -= OnForceRestart;
+            wallEntityInfoManager.restartSummonFlow -= OnRestartGame;
         }
     }
 }

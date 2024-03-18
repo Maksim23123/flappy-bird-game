@@ -48,6 +48,8 @@ public class WallEntityInfoManager : EntityInfoManager
 
     private void Start()
     {
+        forceRestart = null;
+        restartSummonFlow = null;
         OnDificultyChanged(RoundStats.CurrentDificulty);
         RoundStats.DifficultyChanged += OnDificultyChanged;
     }
@@ -57,7 +59,7 @@ public class WallEntityInfoManager : EntityInfoManager
         if (difficultySettings.TryGetValue(difficulty, out Vector3 newDiffOffset))
         {
             difficultyOffset = newDiffOffset;
-            forceRestart();
+            forceRestart?.Invoke();
         }
     }
 
@@ -117,14 +119,17 @@ public class WallEntityInfoManager : EntityInfoManager
                 instance.pivotPoint = pivot;
                 instance.retireDistance = entityInfo.RetireDistance;
                 instance.sendReuseRequest = Reuse;
-                forceRestart += instance.OnForceRestart; //Change it
-                restartSummonFlow += instance.OnRestartGame;
+                if (instance.GetType() == typeof(WallInstance))
+                {
+                    ((WallInstance)instance).wallEntityInfoManager = this;
+                }
 
                 AddDrop(instance);
 
                 transformsQueue.Enqueue(instance.gameObject.transform);
             }
         }
+        RoundStats.firstEnemyPosition = transformsQueue.Peek().position;
     }
 
     private void AddDrop(Instance instance)
@@ -181,7 +186,7 @@ public class WallEntityInfoManager : EntityInfoManager
     {
         if (restartable)
         {
-            restartSummonFlow.Invoke(ValidatePositionPivotAccording);
+            restartSummonFlow?.Invoke(ValidatePositionPivotAccording);
         }
     }
 

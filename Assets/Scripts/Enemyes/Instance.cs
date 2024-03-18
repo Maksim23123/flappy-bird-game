@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Instance : MonoBehaviour
@@ -10,6 +11,7 @@ public class Instance : MonoBehaviour
     [SerializeField]
     public Transform pivotPoint;
     public Action<GameObject> sendReuseRequest = null;
+    
 
     // Internal parameters
     public float retireDistance = 13f;

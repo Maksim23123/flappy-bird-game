@@ -120,6 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   value: 1
+  particleSys: {fileID: 2545460029683010412, guid: 0b88a7d96ca8f8843a5215e06145ebe2, type: 3}
 --- !u!1001 &1557249952982942338
 PrefabInstance:
   m_ObjectHideFlags: 0

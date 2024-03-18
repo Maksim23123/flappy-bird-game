@@ -55,7 +55,6 @@ public class Player : MonoBehaviour
         float noEnemiesBias = Mathf.Clamp(Vector3.Distance(transform.position, RoundStats.firstEnemyPosition) - 13, 0, float.PositiveInfinity);
         transform.Translate(Vector3.right * (speed + noEnemiesBias) * Time.deltaTime);
 
-
         GetPlayerInput();
 
         if (jump)

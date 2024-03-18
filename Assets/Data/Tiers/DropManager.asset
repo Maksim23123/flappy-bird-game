@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: DropManager
   m_EditorClassIdentifier: 
   tiers:
-  - chance: 500
+  - chance: 5
     drop: {fileID: 1812231557420309338, guid: 11c53c5bd16ed5545b1558f38e2ff0e7, type: 3}
     isPlaceholder: 0
-  - chance: 500
+  - chance: 150
     drop: {fileID: 1812231557420309338, guid: 5b9b0a4f47ca28d41b406ae96070acd8, type: 3}
     isPlaceholder: 0
-  - chance: 0
+  - chance: 845
     drop: {fileID: 0}
     isPlaceholder: 1
