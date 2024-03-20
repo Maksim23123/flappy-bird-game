@@ -754,7 +754,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 651711754}
   m_HandleRect: {fileID: 651711753}
   m_Direction: 0
-  m_Value: -0.09803057
+  m_Value: -0.05897433
   m_Size: 0.00057617755
   m_NumberOfSteps: 2
   m_OnValueChanged:
@@ -5087,7 +5087,7 @@ MonoBehaviour:
   rotarionZoneLeftTopCornerScalar: {x: 0.43, y: 0.65}
   rotarionZoneRightBottomCornerScalar: {x: 0.43, y: 0.2}
   touchSensitivity: 1
-  rotationSpeed: 0.2
+  rotationSpeed: 0.4
   horizontalAxis: {fileID: 1016945410}
   verticalAxis: {fileID: 1956555858}
 --- !u!1 &1316501780
