@@ -49,13 +49,10 @@ public class Player : MonoBehaviour
         RoundStats.DifficultyChanged += OnDificultyChanged;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
         float noEnemiesBias = Mathf.Clamp(Vector3.Distance(transform.position, RoundStats.firstEnemyPosition) - 13, 0, float.PositiveInfinity);
         transform.Translate(Vector3.right * (speed + noEnemiesBias) * Time.deltaTime);
-
-        GetPlayerInput();
 
         if (jump)
         {
@@ -70,6 +67,12 @@ public class Player : MonoBehaviour
         }
 
         UpdateLookAtPoint();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        GetPlayerInput();
     }
 
     private void OnCollisionEnter(Collision collision)
