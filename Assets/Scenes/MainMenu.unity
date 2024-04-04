@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 0}
+  m_Sun: {fileID: 1843915023}
   m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 306b4ef3a13d1164a842f1719210128a, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -415,7 +415,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -868.5, y: 147.7457}
+  m_AnchoredPosition: {x: -868.50006, y: 147.7457}
   m_SizeDelta: {x: 3472, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &98793545
@@ -754,8 +754,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 651711754}
   m_HandleRect: {fileID: 651711753}
   m_Direction: 0
-  m_Value: -0.05897433
-  m_Size: 0.00057617755
+  m_Value: 0
+  m_Size: 0.500288
   m_NumberOfSteps: 2
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1572,6 +1572,7 @@ GameObject:
   - component: {fileID: 291570256}
   - component: {fileID: 291570253}
   - component: {fileID: 291570252}
+  - component: {fileID: 291570257}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1687,6 +1688,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameData: {fileID: 11400000, guid: 6dc6d10b62d502e41ad8465c7e933d29, type: 2}
+--- !u!114 &291570257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 291570251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a1b69c77259864dbe2310c6651392e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &375767048
 GameObject:
   m_ObjectHideFlags: 0
@@ -2657,8 +2670,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1280721016}
   m_HandleRect: {fileID: 1280721015}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 1
+  m_Value: 0
+  m_Size: 0.9999997
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4843,8 +4856,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 526936477}
   m_HandleRect: {fileID: 526936476}
   m_Direction: 0
-  m_Value: 0.22400023
-  m_Size: 0.5074323
+  m_Value: 0.22400063
+  m_Size: 0.5074322
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -10233,8 +10246,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 955633526}
   m_HandleRect: {fileID: 955633525}
   m_Direction: 2
-  m_Value: 1.0000541
-  m_Size: 0.98497313
+  m_Value: 1.0000609
+  m_Size: 0.98497355
   m_NumberOfSteps: 5
   m_OnValueChanged:
     m_PersistentCalls:
