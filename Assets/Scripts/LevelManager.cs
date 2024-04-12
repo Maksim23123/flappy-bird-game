@@ -8,8 +8,8 @@ using UnityEngine.UI;
 public class LevelManager : MonoBehaviour
 {
     [SerializeField]
-    private GameData gameData;
-    public GameData GameData { get => gameData; }
+    private AboveGameDataLayer gameData;
+    public AboveGameDataLayer GameData { get => gameData; }
 
     public event Action<GameState> onChangeGameState = null;
 
