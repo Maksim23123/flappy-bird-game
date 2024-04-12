@@ -15,7 +15,7 @@ public class Gem : Colectable
 
     private void OnTriggerEnter(Collider other)
     {
-        PickUpThis(new PickUpColectableEventArgs(colectableType, value));
+        PickUpThis(colectableType, value);
 
         if (Instantiate(particleSys, transform.position, Quaternion.identity)
                 .TryGetComponent<ParticleSystem>(out ParticleSystem particles) && GameUIManager.particlesColector != null)

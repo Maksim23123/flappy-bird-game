@@ -15,6 +15,8 @@ public static class RoundStats
 
     static public Vector3 firstEnemyPosition;
 
+    static private float currencyesMultiplier = 1;
+
     static public int GameScore
     {
         get { return gameScore; }
@@ -39,6 +41,8 @@ public static class RoundStats
             DifficultyChanged?.Invoke(value);
         }
     }
+
+    public static float CurrencyesMultiplier { get => currencyesMultiplier; set => currencyesMultiplier = value; }
 
     static public void ResetGameScore()
     {

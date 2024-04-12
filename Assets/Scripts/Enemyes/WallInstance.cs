@@ -10,6 +10,7 @@ public class WallInstance : Instance
     List<GameObject> colectables = new List<GameObject>();
     public WallEntityInfoManager wallEntityInfoManager;
     public int betweenInstancesOffset = 0;
+    public bool rearanged = false;
 
     // Internal parameters
 

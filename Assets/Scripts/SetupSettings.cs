@@ -26,7 +26,7 @@ public class SetupSettings : MonoBehaviour
             PlayerPrefs.SetInt("primalScreenHight", currResolution.height);
         }
         
-        Screen.SetResolution(currResolution.width / 3, currResolution.height / 3, true);
+        Screen.SetResolution((int)(currResolution.width / 2), (int)(currResolution.height / 2), true);
     }
 
     void ResetResolution()

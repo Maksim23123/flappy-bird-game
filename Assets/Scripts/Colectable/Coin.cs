@@ -11,9 +11,14 @@ public class Coin : Colectable
     [SerializeField]
     private GameObject particleSys;
 
+    private void Start()
+    {
+        multipliable = true;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        PickUpThis(new PickUpColectableEventArgs(colectableType, value));
+        PickUpThis(colectableType, value);
 
         if (particleSys != null)
             Instantiate(particleSys, transform.position, Quaternion.identity);

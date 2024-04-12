@@ -41,18 +41,38 @@ public class Player : MonoBehaviour
     private bool jump;
     private Rigidbody rb;
     private bool jumpParticlesInCooldown = false;
+    PlayerStates playerState = PlayerStates.Deffault;
+    private float targetSpeed;
+    private bool isNotAtTargetSpeed = false;
+
+    public PlayerStates PlayerState { get => playerState; set => playerState = value; }
+    public float Speed 
+    { 
+        get
+        {
+            SaveSpeed();
+            return speed;
+        } 
+        set
+        {
+            isNotAtTargetSpeed = true;
+            speed = value;
+        }
+    }
+
+    public float TargetSpeed { get => targetSpeed; }
 
     void Start()
     {
         levelManager.onChangeGameState += OnChangeGameState;
         rb = GetComponent<Rigidbody>();
-        RoundStats.DifficultyChanged += OnDificultyChanged;
+        RoundStats.DifficultyChanged += OnDifficultyChanged;
     }
 
     private void FixedUpdate()
     {
         float noEnemiesBias = Mathf.Clamp(Vector3.Distance(transform.position, RoundStats.firstEnemyPosition) - 13, 0, float.PositiveInfinity);
-        transform.Translate(Vector3.right * (speed + noEnemiesBias) * Time.deltaTime);
+        transform.Translate(Vector3.right * (Speed + noEnemiesBias) * Time.deltaTime);
 
         if (jump)
         {
@@ -72,15 +92,16 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(speed);
         GetPlayerInput();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        playerMesh.SetActive(false);
-        dieParticleSystem.SetActive(true);
-        dieParticleSystem.GetComponent<ParticleSystem>().Play();
-        onGameOverEvent?.Invoke();
+        if (playerState == PlayerStates.Deffault)
+            StartUpGameOver();
+        else if (playerState == PlayerStates.Invulnerable)
+            Services.OnObstaclesExecutor.TryForceReuseObject(collision.gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -122,11 +143,12 @@ public class Player : MonoBehaviour
         
     }
 
-    private void OnDificultyChanged(RoundStats.Difficulty difficulty)
+    private void OnDifficultyChanged(RoundStats.Difficulty difficulty)
     {
         if (difficultySettings.TryGetValue(difficulty, out int newSpeed))
         {
-            speed = newSpeed;
+            targetSpeed = newSpeed;
+            Speed = newSpeed;
         }
     }
 
@@ -135,5 +157,26 @@ public class Player : MonoBehaviour
         jumpParticlesInCooldown = true;
         yield return new WaitForSeconds(0.1f);
         jumpParticlesInCooldown = false;
+    }
+
+    private void StartUpGameOver()
+    {
+        playerMesh.SetActive(false);
+        dieParticleSystem.SetActive(true);
+        dieParticleSystem.GetComponent<ParticleSystem>().Play();
+        onGameOverEvent?.Invoke();
+    }
+
+    public void SaveSpeed()
+    {
+        if (!isNotAtTargetSpeed)
+            targetSpeed = speed;
+
+    }
+
+    public void ResetSpeed()
+    {
+        isNotAtTargetSpeed = false;
+        speed = TargetSpeed;
     }
 }

@@ -6,11 +6,15 @@ using UnityEngine;
 public abstract class Colectable : MonoBehaviour
 {
     public int value = 1;
+    protected bool multipliable = false;
     public event EventHandler<PickUpColectableEventArgs> PickUpColectable;
 
-    protected void PickUpThis(PickUpColectableEventArgs e)
+    protected void PickUpThis(ColectableType colectableType, int value)
     {
-        PickUpColectable?.Invoke(this, e);
+        float localMultiplier = 1;
+        if (multipliable)
+            localMultiplier = RoundStats.CurrencyesMultiplier;
+        PickUpColectable?.Invoke(this, new PickUpColectableEventArgs(colectableType, value * (int)localMultiplier));
     }
 }
 
