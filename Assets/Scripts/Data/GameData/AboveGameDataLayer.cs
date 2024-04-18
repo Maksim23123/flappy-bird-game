@@ -6,8 +6,7 @@ using UnityEngine;
 [Serializable]
 public class AboveGameDataLayer
 {
-    public event EventHandler<CurrencyEventArgs> coinsCountChanged;
-    public event EventHandler<CurrencyEventArgs> gemsCountChanged;
+    public event EventHandler<CurrencyEventArgs> currencyCountChanged;
 
     [SerializeField]
     GameData gameData;
@@ -22,7 +21,7 @@ public class AboveGameDataLayer
         set
         {
             gameData.CoinsCount = value;
-            coinsCountChanged?.Invoke(this, new CurrencyEventArgs(CurrencyType.Coin, value));
+            currencyCountChanged?.Invoke(this, new CurrencyEventArgs(CurrencyType.Coin, value));
         }
     }
 
@@ -36,7 +35,20 @@ public class AboveGameDataLayer
         set
         {
             gameData.GemsCount = value;
-            gemsCountChanged?.Invoke(this, new CurrencyEventArgs(CurrencyType.Gem, value));
+            currencyCountChanged?.Invoke(this, new CurrencyEventArgs(CurrencyType.Gem, value));
         }
+    }
+
+    public int GetCurrencyAmountByType(CurrencyType type)
+    {
+        if (type == CurrencyType.Gem)
+        {
+            return GemsCount;
+        }
+        else
+        {
+            return CoinsCount;
+        }
+        
     }
 }

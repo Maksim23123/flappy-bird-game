@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class RuntimeCoinCounter : MonoBehaviour
+public class RuntimeCurrencyCounter : MonoBehaviour
 {
     [SerializeField]
     private TextMeshProUGUI textMeshProUGUI;
@@ -11,22 +11,29 @@ public class RuntimeCoinCounter : MonoBehaviour
     [SerializeField]
     private LevelManager levelManager;
 
+    [SerializeField]
+    private CurrencyType currencyType;
+
     // Start is called before the first frame update
     void Start()
     {
         UpdateCount();
-        levelManager.GameData.coinsCountChanged += ProcessUpdateCountRequest;
+        levelManager.GameData.currencyCountChanged += ProcessUpdateCountRequest;
     }
 
     void ProcessUpdateCountRequest(object o, CurrencyEventArgs e)
     {
-        UpdateCount();
+        if (e.Type == currencyType)
+        {
+            UpdateCount();
+        }
+        
     }
 
     
     void UpdateCount()
     {
-        textMeshProUGUI.text = levelManager.GameData.CoinsCount.ToString();
+        textMeshProUGUI.text = levelManager.GameData.GetCurrencyAmountByType(currencyType).ToString();
     }
 
 

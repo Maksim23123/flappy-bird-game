@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ScoreCounter : MonoBehaviour
 {
-    private readonly string defaultText = "Score: ";
+    private readonly string defaultText = "";
     [SerializeField]
     private TextMeshProUGUI[] textMeshs;
 

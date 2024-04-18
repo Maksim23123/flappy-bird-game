@@ -6,10 +6,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GameData", menuName = "Data/GameData")]
 public class GameData : ScriptableObject
 {
-    
     private readonly string COINS_TAG = "coinsCount";
 
-    
     private readonly string GEMS_TAG = "gemsCount";
 
     public int CoinsCount
